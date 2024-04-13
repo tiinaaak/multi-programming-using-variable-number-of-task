@@ -1,0 +1,65 @@
+
+#include<stdio.h>
+#include<stdlib.h>
+ 
+int main() {
+   int ms, *mp, i, temp, n = 0;
+   char ch = 'y';
+ 
+   // Get the total memory available from the user
+   printf("\nEnter the total memory available (in Bytes)-- ");
+   if (scanf("%d", &ms) != 1 || ms <= 0) {
+       printf("Invalid input for total memory. Exiting program.\n");
+       return 1; // Exit with an error code
+   }
+ 
+   temp = ms;
+   mp = (int *)malloc(10 * sizeof(int)); // Dynamic memory allocation for memory requirements
+ 
+   if (!mp) {
+       printf("Memory allocation failed. Exiting program.\n");
+       return 1; // Exit with an error code
+   }
+ 
+   // Loop for memory allocation for processes
+   for (i = 0; ch == 'y' && i < 10; i++, n++) {
+       // Get memory required for the current process
+       printf("\nEnter memory required for process %d (in Bytes) -- ", i + 1);
+       if (scanf("%d", &mp[i]) != 1 || mp[i] <= 0) {
+           printf("Invalid input for memory requirement. Exiting program.\n");
+           free(mp); // Free allocated memory
+           return 1; // Exit with an error code
+       }
+ 
+       // Check if there's enough memory for the process
+       if (mp[i] <= temp) {
+           // Allocate memory for the process and update available memory
+           printf("\nMemory is allocated for Process %d ", i + 1);
+           temp -= mp[i];
+       } else {
+           // Display "Memory is Full" and exit the loop if memory is insufficient
+           
+ break;
+}
+       // Ask the user if they want to continue allocating memory
+       printf("\nDo you want to continue(y/n) -- ");
+       scanf(" %c", &ch);
+   }
+ 
+   // Display total available memory
+   printf("\n\nTotal Memory Available -- %d", ms);
+ 
+   // Display the memory allocated for each process
+   printf("\n\n\tPROCESS\t\t MEMORY ALLOCATED ");
+   for (i = 0; i < n; i++)
+       printf("\n \t%d\t\t%d", i + 1, mp[i]);
+ 
+   // Display total allocated memory and external fragmentation
+   printf("\n\nTotal Memory Allocated is %d", ms - temp);
+   printf("\nTotal External Fragmentation is %d\n", temp);
+ 
+   // Free allocated memory
+   free(mp);
+ 
+   return 0;
+}
